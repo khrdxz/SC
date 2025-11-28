@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saúde Conecta • Sistema Completo</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body data-theme="dark">
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <div class="logo">SC</div>
+        <div class="brand-text">
+          <h1>Saúde Conecta</h1>
+          <p>Sistema completo de agendamento • v2.0</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div id="userBadge" class="user-badge hidden">
+          <div class="badge-dot"></div>
+          <span id="badgeUser"></span>
+          <span>•</span>
+          <span id="badgeRole" class="text-muted"></span>
+        </div>
+        <button id="toggleTheme" class="btn btn-secondary">☀️ Modo Claro</button>
+        <button id="btnSair" class="btn btn-ghost hidden">Sair</button>
+      </div>
+    </header>
+
+    <div class="main-layout">
+      <aside class="sidebar">
+        <div class="card">
+          <div class="nav-section">
+            <h3 class="nav-title">Navegação</h3>
+            <div class="nav-list">
+              <button class="nav-item active" data-view="auth">🔐 Login</button>
+              <button class="nav-item" data-view="saude" disabled>🏥 Saúde</button>
+              <button class="nav-item" data-view="usuario" disabled>👤 Usuário</button>
+              <button class="nav-item" data-view="admin" disabled>⚙️ Admin</button>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <h3 class="nav-title">Ações Rápidas</h3>
+            <div class="nav-list">
+              <button class="nav-item" id="quickAgendar" disabled>📅 Agendar</button>
+              <button class="nav-item" id="quickConsultas" disabled>📋 Consultas</button>
+              <button class="nav-item" id="quickPerfil" disabled>🔧 Perfil</button>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <h3 class="nav-title">Acessibilidade</h3>
+            <div class="flex">
+              <button id="incFont" class="btn btn-ghost" title="Aumentar fonte">A+</button>
+              <button id="decFont" class="btn btn-ghost" title="Diminuir fonte">A-</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        <!-- AUTH -->
+        <div id="viewAuth" class="card">
+          <div class="card-header">
+            <h2 class="card-title">Entrar no Sistema</h2>
+          </div>
+
+          <div class="grid grid-2">
+            <div class="form-group">
+              <label class="form-label">Usuário</label>
+              <input id="loginUser" class="form-input" placeholder="Digite seu usuário">
+              <div class="form-error" id="loginUserError">Campo obrigatório</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Senha</label>
+              <input id="loginPass" class="form-input" type="password" placeholder="Digite sua senha">
+              <div class="form-error" id="loginPassError">Campo obrigatório</div>
+            </div>
+          </div>
+
+          <div class="flex-between mt-4">
+            <button id="showRegister" class="btn btn-secondary">Criar Conta</button>
+            <button id="btnEntrar" class="btn btn-primary">Entrar →</button>
+          </div>
+
+          <div id="registerCard" class="card hidden mt-4">
+            <div class="card-header">
+              <h3 class="card-title">Cadastro Completo</h3>
+            </div>
+
+            <div class="grid grid-3">
+              <div class="form-group">
+                <label class="form-label">Usuário *</label>
+                <input id="regUser" class="form-input" placeholder="nome_usuario">
+                <div class="form-error" id="regUserError">Campo obrigatório</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Senha *</label>
+                <input id="regPass" class="form-input" type="password" placeholder="Mínimo 6 caracteres">
+                <div class="form-error" id="regPassError">Mínimo 6 caracteres</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirmar Senha *</label>
+                <input id="regPass2" class="form-input" type="password" placeholder="Repita a senha">
+                <div class="form-error" id="regPass2Error">Senhas não coincidem</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nome Completo *</label>
+                <input id="regNome" class="form-input" placeholder="Seu nome completo">
+                <div class="form-error" id="regNomeError">Campo obrigatório</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Data de Nascimento</label>
+                <input id="regNasc" class="form-input" type="date">
+              </div>
+              <div class="form-group">
+                <label class="form-label">CPF</label>
+                <input id="regCpf" class="form-input" placeholder="000.000.000-00">
+              </div>
+              <div class="form-group">
+                <label class="form-label">CEP</label>
+                <input id="regCep" class="form-input" placeholder="00000-000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Telefone</label>
+                <input id="regTel" class="form-input" placeholder="(00) 00000-0000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">E-mail</label>
+                <input id="regEmail" class="form-input" type="email" placeholder="seu@email.com">
+              </div>
+            </div>
+
+            <div class="flex-between mt-4">
+              <button id="cancelRegister" class="btn btn-secondary">Cancelar</button>
+              <button id="saveRegister" class="btn btn-primary">Cadastrar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SAÚDE -->
+        <div id="viewSaude" class="hidden">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Novo Agendamento</h2>
+            </div>
+
+            <div class="grid grid-2">
+              <div class="form-group">
+                <label class="form-label">Especialidade</label>
+                <select id="selEsp" class="form-select">
+                  <option value="">Selecione a especialidade...</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Médico</label>
+                <select id="selMed" class="form-select">
+                  <option value="">Selecione o médico...</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Data da Consulta</label>
+              <input id="selData" class="form-input" type="date">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Horários Disponíveis</label>
+              <div id="horarios" class="time-slots">
+                <span class="text-muted">Selecione uma especialidade primeiro</span>
+              </div>
+            </div>
+
+            <div class="flex-between mt-4">
+              <button id="btnConfirmar" class="btn btn-primary">Confirmar Agendamento</button>
+              <button id="btnImprimir" class="btn btn-secondary">🖨️ Imprimir</button>
+            </div>
+          </div>
+
+          <div class="card mt-4">
+            <div class="card-header">
+              <h2 class="card-title">Minhas Consultas</h2>
+              <button id="refreshConsultas" class="btn btn-secondary btn-sm">🔄 Atualizar</button>
+            </div>
+            <div id="listaConsultas"></div>
+          </div>
+        </div>
+
+        <!-- USUÁRIO -->
+        <div id="viewUsuario" class="hidden">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Meu Perfil</h2>
+            </div>
+
+            <div class="grid grid-3">
+              <div class="form-group">
+                <label class="form-label">Nome Completo</label>
+                <input id="perfilNome" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Data de Nascimento</label>
+                <input id="perfilNasc" class="form-input" type="date">
+              </div>
+              <div class="form-group">
+                <label class="form-label">CPF</label>
+                <input id="perfilCpf" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">CEP</label>
+                <input id="perfilCep" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Telefone</label>
+                <input id="perfilTel" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">E-mail</label>
+                <input id="perfilEmail" class="form-input" type="email">
+              </div>
+            </div>
+
+            <div class="flex-between mt-4">
+              <button id="btnAlterarSenha" class="btn btn-secondary">🔒 Alterar Senha</button>
+              <button id="btnSalvarPerfil" class="btn btn-primary">Salvar Alterações</button>
+            </div>
+          </div>
+
+          <div id="alterarSenhaCard" class="card mt-4 hidden">
+            <div class="card-header">
+              <h3 class="card-title">Alterar Senha</h3>
+            </div>
+            <div class="grid grid-3">
+              <div class="form-group">
+                <label class="form-label">Senha Atual</label>
+                <input id="senhaAtual" class="form-input" type="password">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nova Senha</label>
+                <input id="senhaNova" class="form-input" type="password">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirmar Nova</label>
+                <input id="senhaNovaConf" class="form-input" type="password">
+              </div>
+            </div>
+            <div class="flex-between mt-4">
+              <button id="cancelarSenha" class="btn btn-secondary">Cancelar</button>
+              <button id="salvarSenha" class="btn btn-primary">Salvar Senha</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADMIN -->
+        <div id="viewAdmin" class="hidden">
+          <div class="grid grid-4 mb-4">
+            <div class="card stat-card">
+              <div class="stat-value" id="statUsuarios">0</div>
+              <div class="stat-label">Usuários</div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-value" id="statMedicos">0</div>
+              <div class="stat-label">Médicos</div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-value" id="statConsultas">0</div>
+              <div class="stat-label">Consultas</div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-value" id="statHoje">0</div>
+              <div class="stat-label">Hoje</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Gerenciar Médicos</h2>
+              <button id="addMedico" class="btn btn-primary btn-sm">➕ Adicionar</button>
+            </div>
+            <div id="listaMedicos"></div>
+          </div>
+
+          <div class="card mt-4">
+            <div class="card-header">
+              <h2 class="card-title">Gerenciar Usuários</h2>
+              <button id="addUsuario" class="btn btn-primary btn-sm">➕ Adicionar</button>
+            </div>
+            <div id="listaUsuarios"></div>
+          </div>
+
+          <div class="card mt-4">
+            <div class="card-header">
+              <h2 class="card-title">Todas as Consultas</h2>
+              <button id="refreshAllConsultas" class="btn btn-secondary btn-sm">🔄 Atualizar</button>
+            </div>
+            <div id="listaTodasConsultas"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <p>Saúde Conecta v2.0 • Sistema Completo de Agendamento Médico</p>
+    </footer>
+  </div>
+
+  <!-- MODAIS -->
+  <div id="modalMedico" class="modal-overlay">
+    <div class="modal card">
+      <div class="card-header">
+        <h2 class="card-title" id="modalMedicoTitle">Adicionar Médico</h2>
+      </div>
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label class="form-label">Nome Completo *</label>
+          <input id="medicoNome" class="form-input" placeholder="Dr(a). Nome Completo">
+        </div>
+        <div class="form-group">
+          <label class="form-label">CRM *</label>
+          <input id="medicoCrm" class="form-input" placeholder="123456">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Especialidade *</label>
+          <input id="medicoEsp" class="form-input" placeholder="Ex: Cardiologia">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Telefone</label>
+          <input id="medicoTel" class="form-input" placeholder="(00) 00000-0000">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelMedico" class="btn btn-secondary">Cancelar</button>
+        <button id="saveMedico" class="btn btn-primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalUsuario" class="modal-overlay">
+    <div class="modal card">
+      <div class="card-header">
+        <h2 class="card-title" id="modalUsuarioTitle">Adicionar Usuário</h2>
+      </div>
+      <div class="grid grid-3">
+        <div class="form-group">
+          <label class="form-label">Usuário *</label>
+          <input id="usuarioUser" class="form-input" placeholder="nome_usuario">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Senha *</label>
+          <input id="usuarioPass" class="form-input" type="password" placeholder="Mínimo 6">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo *</label>
+          <select id="usuarioTipo" class="form-select">
+            <option value="usuario">Usuário</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nome Completo *</label>
+          <input id="usuarioNome" class="form-input" placeholder="Nome completo">
+        </div>
+        <div class="form-group">
+          <label class="form-label">CPF</label>
+          <input id="usuarioCpf" class="form-input" placeholder="000.000.000-00">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Telefone</label>
+          <input id="usuarioTel" class="form-input" placeholder="(00) 00000-0000">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelUsuario" class="btn btn-secondary">Cancelar</button>
+        <button id="saveUsuario" class="btn btn-primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==================== DADOS ====================
+    let DB = {
+      usuarios: [
+        { id: 1, usuario: 'admin', senha: 'admin123', tipo: 'admin', nome: 'Administrador do Sistema', cpf: '', tel: '', email: 'admin@saude.com', nasc: '', cep: '' },
+        { id: 2, usuario: 'joao', senha: '123456', tipo: 'usuario', nome: 'João Silva Santos', cpf: '123.456.789-00', tel: '(11) 99999-9999', email: 'joao@email.com', nasc: '1990-05-15', cep: '01310-100' }
+      ],
+      medicos: [
+        { id: 1, nome: 'Dr. Carlos Mendes', crm: '123456', especialidade: 'Cardiologia', tel: '(11) 3333-4444' },
+        { id: 2, nome: 'Dra. Ana Paula Costa', crm: '789012', especialidade: 'Dermatologia', tel: '(11) 3333-5555' },
+        { id: 3, nome: 'Dr. Roberto Lima', crm: '345678', especialidade: 'Ortopedia', tel: '(11) 3333-6666' },
+        { id: 4, nome: 'Dra. Maria Fernanda', crm: '456789', especialidade: 'Pediatria', tel: '(11) 3333-7777' }
+      ],
+      consultas: []
+    };
+
+    let sessao = null;
+    let editandoMedico = null;
+    let editandoUsuario = null;
+
+    // ==================== STORAGE ====================
+    const carregarDados = () => {
+      const saved = localStorage.getItem('saudeConectaDB');
+      if (saved) {
+        try {
+          DB = JSON.parse(saved);
+        } catch (e) {
+          console.error('Erro ao carregar:', e);
+        }
+      }
+    };
+
+    const salvarDados = () => {
+      localStorage.setItem('saudeConectaDB', JSON.stringify(DB));
+    };
+
+    // ==================== UTILIDADES ====================
+    const $ = (id) => document.getElementById(id);
+    const show = (el) => el?.classList.remove('hidden');
+    const hide = (el) => el?.classList.add('hidden');
+    const val = (id, v) => v !== undefined ? $(id).value = v : $(id).value;
+
+    const toast = (msg, tipo = 'success') => {
+      const cores = { success: '#22c55e', error: '#ef4444', warning: '#fbbf24', info: '#60a5fa' };
+      const div = document.createElement('div');
+      div.textContent = msg;
+      div.style.cssText = `position:fixed;top:24px;right:24px;background:${cores[tipo]};color:#fff;padding:16px 24px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:9999;font-weight:600;max-width:400px;`;
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 3000);
+    };
+
+    const formatCPF = (v) => v.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4').substring(0, 14);
+    const formatTel = (v) => v.replace(/\D/g, '').replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3').substring(0, 15);
+    const formatCEP = (v) => v.replace(/\D/g, '').replace(/(\d{5})(\d{3})/, '$1-$2').substring(0, 9);
+
+    // ==================== NAVEGAÇÃO ====================
+    const navegarPara = (view) => {
+      ['viewAuth', 'viewSaude', 'viewUsuario', 'viewAdmin'].forEach(v => hide($(v)));
+      show($(view));
+      
+      document.querySelectorAll('.nav-item[data-view]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === view.replace('view', '').toLowerCase());
+      });
+
+      if (view === 'viewSaude') carregarEspecialidades();
+      if (view === 'viewUsuario') carregarPerfil();
+      if (view === 'viewAdmin') carregarAdmin();
+    };
+
+    const atualizarNavegacao = () => {
+      const isAuth = !!sessao;
+      const isAdmin = sessao?.tipo === 'admin';
+
+      $('userBadge').classList.toggle('hidden', !isAuth);
+      $('btnSair').classList.toggle('hidden', !isAuth);
+
+      document.querySelectorAll('.nav-item[data-view]').forEach(btn => {
+        const view = btn.dataset.view;
+        if (view === 'auth') {
+          btn.disabled = isAuth;
+        } else if (view === 'admin') {
+          btn.disabled = !isAdmin;
+        } else {
+          btn.disabled = !isAuth;
+        }
+      });
+
+      ['quickAgendar', 'quickConsultas', 'quickPerfil'].forEach(id => {
+        $(id).disabled = !isAuth;
+      });
+
+      if (isAuth) {
+        $('badgeUser').textContent = sessao.nome;
+        $('badgeRole').textContent = sessao.tipo === 'admin' ? 'Administrador' : 'Paciente';
+      }
+    };
+
+    // ==================== VALIDAÇÃO ====================
+    const validarCampo = (id, errorId, validacao, msgErro) => {
+      const campo = $(id);
+      const erro = $(errorId);
+      const valido = validacao(campo.value);
+      
+      campo.classList.toggle('error', !valido);
+      erro.classList.toggle('show', !valido);
+      if (!valido && msgErro) erro.textContent = msgErro;
+      
+      return valido;
+    };
+
+    // ==================== AUTENTICAÇÃO ====================
+    $('btnEntrar').onclick = () => {
+      const usuario = val('loginUser').trim();
+      const senha = val('loginPass');
+
+      const validUser = validarCampo('loginUser', 'loginUserError', v => v.length > 0);
+      const validPass = validarCampo('loginPass', 'loginPassError', v => v.length > 0);
+
+      if (!validUser || !validPass) return;
+
+      const user = DB.usuarios.find(u => u.usuario === usuario && u.senha === senha);
+      
+      if (user) {
+        sessao = user;
+        toast(`Bem-vinda, ${user.nome}! 🌟`, 'success');
+        atualizarNavegacao();
+        navegarPara('viewSaude');
+        val('loginUser', '');
+        val('loginPass', '');
+      } else {
+        toast('Usuário ou senha incorretos!', 'error');
+      }
+    };
+
+    $('showRegister').onclick = () => show($('registerCard'));
+    
+    $('cancelRegister').onclick = () => {
+      hide($('registerCard'));
+      ['regUser', 'regPass', 'regPass2', 'regNome', 'regNasc', 'regCpf', 'regCep', 'regTel', 'regEmail'].forEach(id => {
+        val(id, '');
+        $(id).classList.remove('error');
+        $(`${id}Error`)?.classList.remove('show');
+      });
+    };
+
+    $('saveRegister').onclick = () => {
+      const usuario = val('regUser').trim();
+      const senha = val('regPass');
+      const senha2 = val('regPass2');
+      const nome = val('regNome').trim();
+
+      let valido = true;
+      valido &= validarCampo('regUser', 'regUserError', v => v.length > 0);
+      valido &= validarCampo('regPass', 'regPassError', v => v.length >= 6);
+      valido &= validarCampo('regPass2', 'regPass2Error', v => v === senha);
+      valido &= validarCampo('regNome', 'regNomeError', v => v.length > 0);
+
+      if (!valido) return;
+
+      if (DB.usuarios.find(u => u.usuario === usuario)) {
+        toast('Esse usuário já existe!', 'error');
+        return;
+      }
+
+      const novoUser = {
+        id: Math.max(...DB.usuarios.map(u => u.id), 0) + 1,
+        usuario,
+        senha,
+        tipo: 'usuario',
+        nome,
+        cpf: val('regCpf'),
+        tel: val('regTel'),
+        email: val('regEmail'),
+        nasc: val('regNasc'),
+        cep: val('regCep')
+      };
+
+      DB.usuarios.push(novoUser);
+      salvarDados();
+      toast('Cadastro realizado! Agora podes entrar 🎉', 'success');
+      $('cancelRegister').click();
+    };
+
+    $('btnSair').onclick = () => {
+      sessao = null;
+      atualizarNavegacao();
+      navegarPara('viewAuth');
+      toast('Até! 🌟', 'info');
+    };
+
+    // ==================== AGENDAMENTO ====================
+    const carregarEspecialidades = () => {
+      const especialidades = [...new Set(DB.medicos.map(m => m.especialidade))];
+      $('selEsp').innerHTML = '<option value="">Selecione a especialidade...</option>' + 
+        especialidades.map(e => `<option value="${e}">${e}</option>`).join('');
+      
+      $('selMed').innerHTML = '<option value="">Selecione o médico...</option>';
+      $('horarios').innerHTML = '<span class="text-muted">Selecione uma especialidade primeiro</span>';
+      carregarMinhasConsultas();
+    };
+
+    $('selEsp').onchange = () => {
+      const esp = val('selEsp');
+      if (!esp) {
+        $('selMed').innerHTML = '<option value="">Selecione o médico...</option>';
+        $('horarios').innerHTML = '<span class="text-muted">Selecione uma especialidade primeiro</span>';
+        return;
+      }
+      
+      const medicos = DB.medicos.filter(m => m.especialidade === esp);
+      $('selMed').innerHTML = '<option value="">Selecione o médico...</option>' + 
+        medicos.map(m => `<option value="${m.id}">${m.nome} - CRM ${m.crm}</option>`).join('');
+      $('horarios').innerHTML = '<span class="text-muted">Selecione um médico</span>';
+      val('selData', '');
+    };
+
+    $('selMed').onchange = () => {
+      if (!val('selMed')) {
+        $('horarios').innerHTML = '<span class="text-muted">Selecione um médico</span>';
+        return;
+      }
+      $('horarios').innerHTML = '<span class="text-muted">Selecione uma data</span>';
+      val('selData', '');
+    };
+
+    $('selData').onchange = () => {
+      const medicoId = parseInt(val('selMed'));
+      const data = val('selData');
+      
+      if (!medicoId || !data) return;
+
+      const horarios = ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'];
+      const ocupados = DB.consultas
+        .filter(c => c.medicoId === medicoId && c.data === data && c.status !== 'cancelada')
+        .map(c => c.hora);
+
+      const horariosHTML = horarios.map(h => {
+        const disponivel = !ocupados.includes(h);
+        return `<div class="time-slot ${disponivel ? '' : 'disabled'}" data-hora="${h}">${h}</div>`;
+      }).join('');
+
+      $('horarios').innerHTML = horariosHTML || '<span class="text-muted">Nenhum horário disponível</span>';
+
+      document.querySelectorAll('.time-slot:not(.disabled)').forEach(slot => {
+        slot.onclick = () => {
+          document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+          slot.classList.add('selected');
+        };
+      });
+    };
+
+    $('btnConfirmar').onclick = () => {
+      const medicoId = parseInt(val('selMed'));
+      const data = val('selData');
+      const horaEl = document.querySelector('.time-slot.selected');
+
+      if (!medicoId || !data || !horaEl) {
+        toast('Preenche todos os campos!', 'warning');
+        return;
+      }
+
+      const medico = DB.medicos.find(m => m.id === medicoId);
+      const consulta = {
+        id: Math.max(...DB.consultas.map(c => c.id), 0) + 1,
+        usuarioId: sessao.id,
+        medicoId,
+        medicoNome: medico.nome,
+        especialidade: medico.especialidade,
+        data,
+        hora: horaEl.dataset.hora,
+        status: 'agendada',
+        dataCriacao: new Date().toISOString()
+      };
+
+      DB.consultas.push(consulta);
+      salvarDados();
+      toast('Consulta agendada com sucesso! 📅', 'success');
+      
+      val('selEsp', '');
+      val('selMed', '');
+      val('selData', '');
+      $('horarios').innerHTML = '<span class="text-muted">Selecione uma especialidade primeiro</span>';
+      carregarMinhasConsultas();
+    };
+
+    const carregarMinhasConsultas = () => {
+      const minhas = DB.consultas.filter(c => c.usuarioId === sessao?.id).sort((a, b) => {
+        const dateA = new Date(`${a.data} ${a.hora}`);
+        const dateB = new Date(`${b.data} ${b.hora}`);
+        return dateB - dateA;
+      });
+
+      if (minhas.length === 0) {
+        $('listaConsultas').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📅</div><div class="empty-state-title">Nenhuma consulta agendada</div></div>';
+        return;
+      }
+
+      $('listaConsultas').innerHTML = `
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Hora</th>
+                <th>Médico</th>
+                <th>Especialidade</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${minhas.map(c => `
+                <tr>
+                  <td>${new Date(c.data + 'T00:00:00').toLocaleDateString('pt-BR')}</td>
+                  <td>${c.hora}</td>
+                  <td>${c.medicoNome}</td>
+                  <td>${c.especialidade}</td>
+                  <td><span class="badge badge-${c.status === 'agendada' ? 'success' : c.status === 'realizada' ? 'info' : 'danger'}">${c.status}</span></td>
+                  <td>
+                    ${c.status === 'agendada' ? `<button class="btn btn-danger btn-sm" onclick="cancelarConsulta(${c.id})">Cancelar</button>` : '—'}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    };
+
+    window.cancelarConsulta = (id) => {
+      if (!confirm('Tens certeza que desejas cancelar esta consulta?')) return;
+      
+      const consulta = DB.consultas.find(c => c.id === id);
+      if (consulta) {
+        consulta.status = 'cancelada';
+        salvarDados();
+        toast('Consulta cancelada', 'info');
+        carregarMinhasConsultas();
+        if (sessao?.tipo === 'admin') carregarAdmin();
+      }
+    };
+
+    $('refreshConsultas').onclick = carregarMinhasConsultas;
+    $('btnImprimir').onclick = () => window.print();
+
+    // ==================== PERFIL ====================
+    const carregarPerfil = () => {
+      if (!sessao) return;
+      val('perfilNome', sessao.nome);
+      val('perfilNasc', sessao.nasc);
+      val('perfilCpf', sessao.cpf);
+      val('perfilCep', sessao.cep);
+      val('perfilTel', sessao.tel);
+      val('perfilEmail', sessao.email);
+    };
+
+    $('btnSalvarPerfil').onclick = () => {
+      const nome = val('perfilNome').trim();
+      if (!nome) {
+        toast('O nome é obrigatório', 'warning');
+        return;
+      }
+
+      sessao.nome = nome;
+      sessao.nasc = val('perfilNasc');
+      sessao.cpf = val('perfilCpf');
+      sessao.cep = val('perfilCep');
+      sessao.tel = val('perfilTel');
+      sessao.email = val('perfilEmail');
+
+      const idx = DB.usuarios.findIndex(u => u.id === sessao.id);
+      if (idx !== -1) DB.usuarios[idx] = sessao;
+      
+      salvarDados();
+      toast('Perfil atualizado! ✨', 'success');
+      atualizarNavegacao();
+    };
+
+    $('btnAlterarSenha').onclick = () => {
+      show($('alterarSenhaCard'));
+      ['senhaAtual', 'senhaNova', 'senhaNovaConf'].forEach(id => val(id, ''));
+    };
+
+    $('cancelarSenha').onclick = () => {
+      hide($('alterarSenhaCard'));
+      ['senhaAtual', 'senhaNova', 'senhaNovaConf'].forEach(id => val(id, ''));
+    };
+
+    $('salvarSenha').onclick = () => {
+      const atual = val('senhaAtual');
+      const nova = val('senhaNova');
+      const conf = val('senhaNovaConf');
+
+      if (atual !== sessao.senha) {
+        toast('Senha atual incorreta', 'error');
+        return;
+      }
+
+      if (nova.length < 6) {
+        toast('A nova senha deve ter no mínimo 6 caracteres', 'warning');
+        return;
+      }
+
+      if (nova !== conf) {
+        toast('As senhas não coincidem', 'error');
+        return;
+      }
+
+      sessao.senha = nova;
+      const idx = DB.usuarios.findIndex(u => u.id === sessao.id);
+      if (idx !== -1) DB.usuarios[idx].senha = nova;
+      
+      salvarDados();
+      toast('Senha alterada! 🔐', 'success');
+      $('cancelarSenha').click();
+    };
+
+    // ==================== ADMIN ====================
+    const carregarAdmin = () => {
+      if (!sessao || sessao.tipo !== 'admin') return;
+
+      $('statUsuarios').textContent = DB.usuarios.length;
+      $('statMedicos').textContent = DB.medicos.length;
+      $('statConsultas').textContent = DB.consultas.length;
+      
+      const hoje = new Date().toISOString().split('T')[0];
+      $('statHoje').textContent = DB.consultas.filter(c => c.data === hoje && c.status === 'agendada').length;
+
+      carregarListaMedicos();
+      carregarListaUsuarios();
+      carregarTodasConsultas();
+    };
+
+    const carregarListaMedicos = () => {
+      if (DB.medicos.length === 0) {
+        $('listaMedicos').innerHTML = '<div class="empty-state"><div class="empty-state-icon">👨‍⚕️</div><div class="empty-state-title">Nenhum médico cadastrado</div></div>';
+        return;
+      }
+
+      $('listaMedicos').innerHTML = `
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>CRM</th>
+                <th>Especialidade</th>
+                <th>Telefone</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${DB.medicos.map(m => `
+                <tr>
+                  <td>${m.nome}</td>
+                  <td>${m.crm}</td>
+                  <td><span class="badge badge-info">${m.especialidade}</span></td>
+                  <td>${m.tel || '—'}</td>
+                  <td>
+                    <button class="btn btn-secondary btn-sm" onclick="editarMedico(${m.id})">✏️</button>
+                    <button class="btn btn-danger btn-sm" onclick="excluirMedico(${m.id})">🗑️</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    };
+
+    const carregarListaUsuarios = () => {
+      $('listaUsuarios').innerHTML = `
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Usuário</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Tipo</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${DB.usuarios.map(u => `
+                <tr>
+                  <td>${u.usuario}</td>
+                  <td>${u.nome}</td>
+                  <td>${u.cpf || '—'}</td>
+                  <td><span class="badge badge-${u.tipo === 'admin' ? 'warning' : 'info'}">${u.tipo}</span></td>
+                  <td>
+                    <button class="btn btn-secondary btn-sm" onclick="editarUsuario(${u.id})">✏️</button>
+                    ${u.id !== sessao.id ? `<button class="btn btn-danger btn-sm" onclick="excluirUsuario(${u.id})">🗑️</button>` : ''}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    };
+
+    const carregarTodasConsultas = () => {
+      const todas = [...DB.consultas].sort((a, b) => {
+        const dateA = new Date(`${a.data} ${a.hora}`);
+        const dateB = new Date(`${b.data} ${b.hora}`);
+        return dateB - dateA;
+      });
+
+      if (todas.length === 0) {
+        $('listaTodasConsultas').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📅</div><div class="empty-state-title">Nenhuma consulta</div></div>';
+        return;
+      }
+
+      $('listaTodasConsultas').innerHTML = `
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Hora</th>
+                <th>Paciente</th>
+                <th>Médico</th>
+                <th>Especialidade</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${todas.map(c => {
+                const usuario = DB.usuarios.find(u => u.id === c.usuarioId);
+                return `
+                  <tr>
+                    <td>${new Date(c.data + 'T00:00:00').toLocaleDateString('pt-BR')}</td>
+                    <td>${c.hora}</td>
+                    <td>${usuario?.nome || 'Desconhecido'}</td>
+                    <td>${c.medicoNome}</td>
+                    <td>${c.especialidade}</td>
+                    <td><span class="badge badge-${c.status === 'agendada' ? 'success' : c.status === 'realizada' ? 'info' : 'danger'}">${c.status}</span></td>
+                    <td>
+                      ${c.status === 'agendada' ? `
+                        <button class="btn btn-secondary btn-sm" onclick="alterarStatusConsulta(${c.id}, 'realizada')">✅</button>
+                        <button class="btn btn-danger btn-sm" onclick="alterarStatusConsulta(${c.id}, 'cancelada')">❌</button>
+                      ` : '—'}
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    };
+
+    window.alterarStatusConsulta = (id, status) => {
+      const consulta = DB.consultas.find(c => c.id === id);
+      if (consulta) {
+        consulta.status = status;
+        salvarDados();
+        toast(`Consulta marcada como ${status}`, 'success');
+        carregarTodasConsultas();
+        carregarAdmin();
+      }
+    };
+
+    $('refreshAllConsultas').onclick = carregarTodasConsultas;
+
+    // ==================== MÉDICOS ====================
+    $('addMedico').onclick = () => {
+      editandoMedico = null;
+      $('modalMedicoTitle').textContent = 'Adicionar Médico';
+      ['medicoNome', 'medicoCrm', 'medicoEsp', 'medicoTel'].forEach(id => val(id, ''));
+      show($('modalMedico'));
+    };
+
+    window.editarMedico = (id) => {
+      const medico = DB.medicos.find(m => m.id === id);
+      if (!medico) return;
+
+      editandoMedico = id;
+      $('modalMedicoTitle').textContent = 'Editar Médico';
+      val('medicoNome', medico.nome);
+      val('medicoCrm', medico.crm);
+      val('medicoEsp', medico.especialidade);
+      val('medicoTel', medico.tel);
+      show($('modalMedico'));
+    };
+
+    window.excluirMedico = (id) => {
+      if (!confirm('Tens certeza que desejas excluir este médico?')) return;
+
+      const idx = DB.medicos.findIndex(m => m.id === id);
+      if (idx !== -1) {
+        DB.medicos.splice(idx, 1);
+        salvarDados();
+        toast('Médico excluído', 'info');
+        carregarAdmin();
+        if (!$('viewAdmin').classList.contains('hidden')) carregarEspecialidades();
+      }
+    };
+
+    $('cancelMedico').onclick = () => hide($('modalMedico'));
+
+    $('saveMedico').onclick = () => {
+      const nome = val('medicoNome').trim();
+      const crm = val('medicoCrm').trim();
+      const especialidade = val('medicoEsp').trim();
+      const tel = val('medicoTel').trim();
+
+      if (!nome || !crm || !especialidade) {
+        toast('Preenche os campos obrigatórios', 'warning');
+        return;
+      }
+
+      if (editandoMedico) {
+        const medico = DB.medicos.find(m => m.id === editandoMedico);
+        if (medico) {
+          medico.nome = nome;
+          medico.crm = crm;
+          medico.especialidade = especialidade;
+          medico.tel = tel;
+          toast('Médico atualizado! ✨', 'success');
+        }
+      } else {
+        const novoMedico = {
+          id: Math.max(...DB.medicos.map(m => m.id), 0) + 1,
+          nome,
+          crm,
+          especialidade,
+          tel
+        };
+        DB.medicos.push(novoMedico);
+        toast('Médico adicionado! 👨‍⚕️', 'success');
+      }
+
+      salvarDados();
+      hide($('modalMedico'));
+      carregarAdmin();
+      if (!$('viewSaude').classList.contains('hidden')) carregarEspecialidades();
+    };
+
+    // ==================== USUÁRIOS ====================
+    $('addUsuario').onclick = () => {
+      editandoUsuario = null;
+      $('modalUsuarioTitle').textContent = 'Adicionar Usuário';
+      ['usuarioUser', 'usuarioPass', 'usuarioNome', 'usuarioCpf', 'usuarioTel'].forEach(id => val(id, ''));
+      val('usuarioTipo', 'usuario');
+      show($('modalUsuario'));
+    };
+
+    window.editarUsuario = (id) => {
+      const usuario = DB.usuarios.find(u => u.id === id);
+      if (!usuario) return;
+
+      editandoUsuario = id;
+      $('modalUsuarioTitle').textContent = 'Editar Usuário';
+      val('usuarioUser', usuario.usuario);
+      val('usuarioPass', usuario.senha);
+      val('usuarioNome', usuario.nome);
+      val('usuarioCpf', usuario.cpf);
+      val('usuarioTel', usuario.tel);
+      val('usuarioTipo', usuario.tipo);
+      show($('modalUsuario'));
+    };
+
+    window.excluirUsuario = (id) => {
+      if (!confirm('Tens certeza que desejas excluir este usuário?')) return;
+
+      const idx = DB.usuarios.findIndex(u => u.id === id);
+      if (idx !== -1) {
+        DB.usuarios.splice(idx, 1);
+        salvarDados();
+        toast('Usuário excluído', 'info');
+        carregarAdmin();
+      }
+    };
+
+    $('cancelUsuario').onclick = () => hide($('modalUsuario'));
+
+    $('saveUsuario').onclick = () => {
+      const usuario = val('usuarioUser').trim();
+      const senha = val('usuarioPass');
+      const nome = val('usuarioNome').trim();
+      const cpf = val('usuarioCpf').trim();
+      const tel = val('usuarioTel').trim();
+      const tipo = val('usuarioTipo');
+
+      if (!usuario || !senha || !nome) {
+        toast('Preenche os campos obrigatórios', 'warning');
+        return;
+      }
+
+      if (senha.length < 6) {
+        toast('A senha deve ter no mínimo 6 caracteres', 'warning');
+        return;
+      }
+
+      if (editandoUsuario) {
+        const user = DB.usuarios.find(u => u.id === editandoUsuario);
+        if (user) {
+          const usuarioExiste = DB.usuarios.find(u => u.usuario === usuario && u.id !== editandoUsuario);
+          if (usuarioExiste) {
+            toast('Esse nome de usuário já está em uso', 'error');
+            return;
+          }
+
+          user.usuario = usuario;
+          user.senha = senha;
+          user.nome = nome;
+          user.cpf = cpf;
+          user.tel = tel;
+          user.tipo = tipo;
+          toast('Usuário atualizado! ✨', 'success');
+          
+          if (sessao.id === editandoUsuario) {
+            sessao = user;
+            atualizarNavegacao();
+          }
+        }
+      } else {
+        if (DB.usuarios.find(u => u.usuario === usuario)) {
+          toast('Esse nome de usuário já existe', 'error');
+          return;
+        }
+
+        const novoUsuario = {
+          id: Math.max(...DB.usuarios.map(u => u.id), 0) + 1,
+          usuario,
+          senha,
+          tipo,
+          nome,
+          cpf,
+          tel,
+          email: '',
+          nasc: '',
+          cep: ''
+        };
+        DB.usuarios.push(novoUsuario);
+        toast('Usuário adicionado! 👤', 'success');
+      }
+
+      salvarDados();
+      hide($('modalUsuario'));
+      carregarAdmin();
+    };
+
+    // ==================== AÇÕES RÁPIDAS ====================
+    $('quickAgendar').onclick = () => navegarPara('viewSaude');
+    $('quickConsultas').onclick = () => {
+      navegarPara('viewSaude');
+      setTimeout(() => $('listaConsultas')?.scrollIntoView({ behavior: 'smooth' }), 100);
+    };
+    $('quickPerfil').onclick = () => navegarPara('viewUsuario');
+
+    // ==================== TEMA ====================
+    $('toggleTheme').onclick = () => {
+      const body = document.body;
+      const isDark = body.dataset.theme === 'dark';
+      body.dataset.theme = isDark ? 'light' : 'dark';
+      $('toggleTheme').textContent = isDark ? '🌙 Modo Escuro' : '☀️ Modo Claro';
+      localStorage.setItem('saudeConectaTheme', body.dataset.theme);
+    };
+
+    // ==================== ACESSIBILIDADE ====================
+    let fontSize = 16;
+    $('incFont').onclick = () => {
+      if (fontSize < 22) {
+        fontSize += 2;
+        document.documentElement.style.fontSize = fontSize + 'px';
+        localStorage.setItem('saudeConectaFontSize', fontSize);
+        toast('Fonte aumentada', 'info');
+      }
+    };
+
+    $('decFont').onclick = () => {
+      if (fontSize > 12) {
+        fontSize -= 2;
+        document.documentElement.style.fontSize = fontSize + 'px';
+        localStorage.setItem('saudeConectaFontSize', fontSize);
+        toast('Fonte diminuída', 'info');
+      }
+    };
+
+    // ==================== FORMATAÇÃO AUTOMÁTICA ====================
+    const aplicarFormato = (inputId, formatFn) => {
+      $(inputId)?.addEventListener('input', (e) => {
+        const cursorPos = e.target.selectionStart;
+        const oldLen = e.target.value.length;
+        e.target.value = formatFn(e.target.value);
+        const newLen = e.target.value.length;
+        const newCursorPos = cursorPos + (newLen - oldLen);
+        e.target.setSelectionRange(newCursorPos, newCursorPos);
+      });
+    };
+
+    aplicarFormato('regCpf', formatCPF);
+    aplicarFormato('regCep', formatCEP);
+    aplicarFormato('regTel', formatTel);
+    aplicarFormato('perfilCpf', formatCPF);
+    aplicarFormato('perfilCep', formatCEP);
+    aplicarFormato('perfilTel', formatTel);
+    aplicarFormato('usuarioCpf', formatCPF);
+    aplicarFormato('usuarioTel', formatTel);
+    aplicarFormato('medicoTel', formatTel);
+
+    // ==================== NAVEGAÇÃO ====================
+    document.querySelectorAll('.nav-item[data-view]').forEach(btn => {
+      btn.onclick = () => {
+        if (!btn.disabled) {
+          const view = btn.dataset.view;
+          navegarPara('view' + view.charAt(0).toUpperCase() + view.slice(1));
+        }
+      };
+    });
+
+    // ==================== FECHAR MODAIS ====================
+    $('modalMedico').onclick = (e) => {
+      if (e.target === $('modalMedico')) hide($('modalMedico'));
+    };
+    $('modalUsuario').onclick = (e) => {
+      if (e.target === $('modalUsuario')) hide($('modalUsuario'));
+    };
+
+    // ==================== ENTER ====================
+    $('loginPass').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') $('btnEntrar').click();
+    });
+
+    // ==================== INICIALIZAÇÃO ====================
+    carregarDados();
+
+    const savedTheme = localStorage.getItem('saudeConectaTheme');
+    if (savedTheme) {
+      document.body.dataset.theme = savedTheme;
+      $('toggleTheme').textContent = savedTheme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+    }
+
+    const savedFontSize = localStorage.getItem('saudeConectaFontSize');
+    if (savedFontSize) {
+      fontSize = parseInt(savedFontSize);
+      document.documentElement.style.fontSize = fontSize + 'px';
+    }
+
+    const hoje = new Date().toISOString().split('T')[0];
+    $('selData').min = hoje;
+
+    atualizarNavegacao();
+    toast('Bem-vinda ao Saúde Conecta! 🌟', 'info');
+
+    setInterval(() => {
+      if (sessao?.tipo === 'admin' && !$('viewAdmin').classList.contains('hidden')) {
+        const hoje = new Date().toISOString().split('T')[0];
+        $('statHoje').textContent = DB.consultas.filter(c => c.data === hoje && c.status === 'agendada').length;
+      }
+    }, 30000);
+    // ==================== ANIMAÇÕES DE LOGIN E ENTRADA ====================
+const animateRegisterCard = (showing) => {
+  const card = $('registerCard');
+  if (showing) {
+    card.classList.remove('hidden');
+    requestAnimationFrame(() => card.classList.add('showing'));
+  } else {
+    card.classList.remove('showing');
+    setTimeout(() => card.classList.add('hidden'), 400);
+  }
+};
+
+// Substitui a lógica padrão de exibir/cancelar cadastro
+$('showRegister').onclick = () => animateRegisterCard(true);
+$('cancelRegister').onclick = () => animateRegisterCard(false);
+
+// Adiciona transição suave ao entrar no sistema
+const oldLogin = $('btnEntrar').onclick;
+$('btnEntrar').onclick = () => {
+  oldLogin();
+  // Se o login for bem-sucedido (sessão criada), anima a transição
+  setTimeout(() => {
+    if (sessao) {
+      $('viewSaude').classList.add('fade-transition');
+      setTimeout(() => $('viewSaude').classList.remove('fade-transition'), 800);
+    }
+  }, 200);
+};
+
+  </script>
+</body>
+</html>
